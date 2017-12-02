@@ -4,79 +4,77 @@
 .. Licence MIT
 .. codeauthor:: Jan Lipovský <janlipovsky@gmail.com>, janlipovsky.cz
 """
-import keyboard  # Using module keyboard
 from AMSpi import AMSpi
 import time
 
-amspi = AMSpi(use_board=False)
+
+class Controller:
+    _AMSPI = AMSpi(use_board=False)
+
+    def __init__(self, _74HC595_pins=None, L293D_pins=None):
+        if _74HC595_pins is None:
+            _74HC595_pins = [21, 20, 16]
+        if L293D_pins is None:
+            L293D_pins = [5, 6, 13, 19]
+
+        self._AMSPI.set_74HC595_pins(_74HC595_pins[0], _74HC595_pins[1], _74HC595_pins[2])
+        self._AMSPI.set_L293D_pins(L293D_pins[0], L293D_pins[1], L293D_pins[2], L293D_pins[3])
+
+    def move_forward(self, forward_speed=None):
+        print("GO: clockwise")
+        self._AMSPI.run_dc_motors(
+            [self._AMSPI.DC_Motor_1, self._AMSPI.DC_Motor_2, self._AMSPI.DC_Motor_3, self._AMSPI.DC_Motor_4],
+            speed=forward_speed)
+        return True
+
+    def move_backward(self, back_speed=None):
+        print("GO: counterclockwise")
+        self._AMSPI.run_dc_motors(
+            [self._AMSPI.DC_Motor_1, self._AMSPI.DC_Motor_2, self._AMSPI.DC_Motor_3, self._AMSPI.DC_Motor_4],
+            clockwise=False,
+            speed=back_speed)
+
+    def move_right(self, right_speed=None):
+        print("Turn right")
+        self._AMSPI.run_dc_motors([self._AMSPI.DC_Motor_1, self._AMSPI.DC_Motor_2], clockwise=False, speed=right_speed)
+        self._AMSPI.run_dc_motors([self._AMSPI.DC_Motor_3, self._AMSPI.DC_Motor_4], speed=right_speed)
+
+    def move_left(self, left_speed=None):
+        print("Turn left")
+        self._AMSPI.run_dc_motors([self._AMSPI.DC_Motor_1, self._AMSPI.DC_Motor_2], speed=left_speed)
+        self._AMSPI.run_dc_motors([self._AMSPI.DC_Motor_3, self._AMSPI.DC_Motor_4], clockwise=False, speed=left_speed)
+
+    def stopall(self):
+        print("Stop")
+        self._AMSPI.stop_dc_motors(
+            [self._AMSPI.DC_Motor_1, self._AMSPI.DC_Motor_2, self._AMSPI.DC_Motor_3, self._AMSPI.DC_Motor_4])
 
 
-def init():
-    # Calling AMSpi() we will use default pin numbering: BCM (use GPIO numbers)
-    # if you want to use BOARD numbering do this: "with AMSpi(True) as amspi:"
-
-    # Set PINs for controlling shift register (GPIO numbering)
-    amspi.set_74HC595_pins(21, 20, 16)
-    # Set PINs for controlling all 4 motors (GPIO numbering)
-    amspi.set_L293D_pins(5, 6, 13, 19)
-
-
-def move_forward(forward_time, forward_speed=None):
-    print("GO: clockwise")
-    amspi.run_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2, amspi.DC_Motor_3, amspi.DC_Motor_4], speed=forward_speed)
-    time.sleep(forward_time)
-    print("Stop")
-    amspi.stop_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2, amspi.DC_Motor_3, amspi.DC_Motor_4])
-
-
-def move_backward(back_time, back_speed=None):
-    print("GO: counterclockwise")
-    amspi.run_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2, amspi.DC_Motor_3, amspi.DC_Motor_4], clockwise=False,
-                        speed=back_speed)
-    time.sleep(back_time)
-    print("Stop")
-    amspi.stop_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2, amspi.DC_Motor_3, amspi.DC_Motor_4])
-
-
-def move_right(right_time, right_speed=None):
-    print("Turn right")
-    amspi.run_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2], clockwise=False, speed=right_speed)
-    amspi.run_dc_motors([amspi.DC_Motor_3, amspi.DC_Motor_4], speed=right_speed)
-
-    time.sleep(right_time)
-    print("Stop")
-    amspi.stop_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2, amspi.DC_Motor_3, amspi.DC_Motor_4])
-
-
-def move_left(left_time, left_speed=None):
-    print("Turn left")
-    amspi.run_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2], speed=left_speed)
-    amspi.run_dc_motors([amspi.DC_Motor_3, amspi.DC_Motor_4], clockwise=False, speed=left_speed)
-    time.sleep(left_time)
-    print("Stop")
-    amspi.stop_dc_motors([amspi.DC_Motor_1, amspi.DC_Motor_2, amspi.DC_Motor_3, amspi.DC_Motor_4])
-
+# Test Main
 
 if __name__ == '__main__':
-
-    init()
-    move_forward(forward_time=0.1)
-    move_backward(back_time=0.1)
-    move_right(right_time=0.1)
-    move_left(left_time=0.1)
+    x = Controller()
+    x.move_forward()
+    x.stopall()
+    x.move_backward()
+    x.stopall()
+    x.move_right()
+    x.stopall()
+    x.move_left()
+    x.stopall()
 
     while True:  # making a loop
         print('waiting')
         try:  # used try so that if user pressed other than the given key error will not be shown
             k = input()
             if k == 'w':  # if key 'q' is pressed
-                move_forward(forward_time=0.1)
+                x.move_forward()
             elif k == 's':  # if key 'q' is pressed
-                move_backward(back_time=0.1)
+                x.move_backward()
             elif k == 'd':  # if key 'q' is pressed
-                move_right(right_time=0.1)
+                x.move_right()
             elif k == 'a':  # if key 'q' is pressed
-                move_left(left_time=0.1)
+                x.move_left()
             elif k == 'q':  # if key 'q' is pressed
                 print('You Pressed Q Key!')
                 break  # finishing the loop

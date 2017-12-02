@@ -24,8 +24,8 @@ if __name__ == '__main__':
         tracker = cv2.TrackerGOTURN_create()
 
 # Read video
-video = cv2.VideoCapture(-1)
-# video.open('http://raspberrypi:8080/stream/video.mjpeg')
+# video = cv2.VideoCapture(-1)
+video.open('http://192.168.1.18:8080/stream/video.mjpeg')
 # Exit if video not opened.
 if not video.isOpened():
     print("Could not open video")
