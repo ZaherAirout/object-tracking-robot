@@ -76,6 +76,5 @@ if __name__ == '__main__':
     movement_thread = threading.Thread(target=objectTracker.track)
     movement_thread.start()
     while objectTracker.is_working:
-        for i in range(10):
             print(objectTracker.position)
             time.sleep(1)
