@@ -116,7 +116,7 @@ def show_webcam(detector='orb', matching='bf', mirror=False):
                     result = cv2.drawMatches(roi, kp1, frame, kp2, good, None, **draw_params)
                     cv2.imshow(window_result, result)
             else:
-                print("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
+                print(("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT)))
                 matchesMask = None
     cv2.destroyAllWindows()
 

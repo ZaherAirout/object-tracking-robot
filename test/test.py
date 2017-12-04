@@ -9,7 +9,7 @@ if __name__ == '__main__':
     # Instead of MIL, you can also use
 
     tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
-    tracker_type = tracker_types[1]
+    tracker_type = tracker_types[0]
     if tracker_type == 'BOOSTING':
         tracker = cv2.TrackerBoosting_create()
     if tracker_type == 'MIL':
@@ -24,8 +24,8 @@ if __name__ == '__main__':
         tracker = cv2.TrackerGOTURN_create()
 
 # Read video
-# video = cv2.VideoCapture(-1)
-video.open('http://192.168.1.18:8080/stream/video.mjpeg')
+video = cv2.VideoCapture()
+video.open('http://raspberrypi:8080/stream/video.mjpeg')
 # Exit if video not opened.
 if not video.isOpened():
     print("Could not open video")

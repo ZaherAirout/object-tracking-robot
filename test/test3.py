@@ -40,8 +40,8 @@ if __name__ == "__main__":
     x = np.random.rand(M)  # 0~1の一様乱数
     y = np.random.rand(M)  # 0~1の一様乱数
 
-    cap = cv2.VideoCapture(-1)
-
+    cap = cv2.VideoCapture()
+    cap.open('http://raspberrypi:8080/stream/video.mjpeg')
     if cap.isOpened() is False:
         print('cannot open web-camera')
         sys.exit(1)
