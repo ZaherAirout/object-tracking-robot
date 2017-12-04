@@ -8,10 +8,11 @@ import numpy as np
 
 class Tracker:
     def __init__(self, video_url=0, buffer_size=64) -> None:
-        self.center = 0
         self.url = video_url
         self.buffer_size = buffer_size
+        # initial position x,y,r
         self.position = [0, 0, 0]
+        self.is_working = True
 
     def track(self):
         # define the lower and upper boundaries of the "green"
@@ -104,3 +105,4 @@ class Tracker:
         # cleanup the camera and close any open windows
         camera.release()
         cv2.destroyAllWindows()
+        self.is_working = False

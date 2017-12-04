@@ -75,9 +75,7 @@ if __name__ == '__main__':
     objectTracker = Tracker(video_url=videoURL)
     movement_thread = threading.Thread(target=objectTracker.track)
     movement_thread.start()
-    if True:
+    while objectTracker.is_working:
         for i in range(10):
             print(objectTracker.position)
-            print(objectTracker.center)
-
             time.sleep(1)
