@@ -1,17 +1,15 @@
 """
    Servo Example - Example of usage ASMpi class
-
-.. Licence MIT
-.. codeauthor:: Jan Lipovský <janlipovsky@gmail.com>, janlipovsky.cz
 """
 from AMSpi import AMSpi
 import time
 
 
-class Controller:
+class QuadMotorController:
     _AMSPI = AMSpi(use_board=False)
 
     def __init__(self, _74HC595_pins=None, L293D_pins=None):
+
         if _74HC595_pins is None:
             _74HC595_pins = [21, 20, 16]
         if L293D_pins is None:
@@ -53,7 +51,7 @@ class Controller:
 # Test Main
 
 if __name__ == '__main__':
-    x = Controller()
+    x = QuadMotorController()
     x.move_forward()
     x.stopall()
     x.move_backward()

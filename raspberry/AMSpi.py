@@ -66,6 +66,7 @@ class AMSpi:
         Initialize function for AMSpi class
         :param bool use_board: True if GPIO.BOARD numbering will be used
         """
+        GPIO.cleanup()
         if use_board:
             GPIO.setmode(GPIO.BOARD)
             print("PIN numbering: BOARD")
